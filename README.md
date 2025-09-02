@@ -22,6 +22,7 @@ pip install -r requirement.txt
 ```
 
 ## Quick Start
+Connect your Meshtastic node through the serial port on your host computer
 
 ```bash
 # Start the data collector
