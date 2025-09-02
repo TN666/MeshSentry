@@ -1,0 +1,3 @@
+meshtastic
+influxdb_client
+python-dotenv
