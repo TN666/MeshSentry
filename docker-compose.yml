@@ -1,10 +1,10 @@
-version: '3.8'
+version: "3.8"
 services:
   influxdb:
     image: influxdb:2.7
     container_name: influxdb
     ports:
-      - "8086:8086"
+      - 8086:8086
     env_file: .env
     volumes:
       - ./influxdb/data:/var/lib/influxdb2
@@ -14,7 +14,7 @@ services:
     env_file: .env
     container_name: grafana
     ports:
-      - "3000:3000"
+      - 3000:3000
     volumes:
       - ./grafana/provider:/etc/grafana/provisioning/dashboards
       - ./grafana/dashboards:/var/lib/grafana/dashboards

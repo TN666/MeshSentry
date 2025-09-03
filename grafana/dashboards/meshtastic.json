@@ -73,7 +73,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^hwModel \\{id=\"!9eeb1da4\", longName=\"Meshtastic 1da4\", macaddr=\"nBOe6x2k\", shortName=\"TN\"\\}$/",
+          "fields": "/.*/",
           "values": false
         },
         "showPercentChange": false,
@@ -247,7 +247,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^latitude \\{id=\"!9eeb1da4\", longName=\"Meshtastic 1da4\", macaddr=\"nBOe6x2k\", shortName=\"TN\"\\}$/",
+          "fields": "",
           "values": false
         },
         "showPercentChange": false,
@@ -305,7 +305,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^longitude \\{id=\"!9eeb1da4\", longName=\"Meshtastic 1da4\", macaddr=\"nBOe6x2k\", shortName=\"TN\"\\}$/",
+          "fields": "",
           "values": false
         },
         "showPercentChange": false,
@@ -363,7 +363,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^altitude \\{id=\"!9eeb1da4\", longName=\"Meshtastic 1da4\", macaddr=\"nBOe6x2k\", shortName=\"TN\"\\}$/",
+          "fields": "",
           "values": false
         },
         "showPercentChange": false,
@@ -837,32 +837,7 @@
           },
           "unit": "percent"
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "localAirUtilTx {id=\"!9eeb1da4\", longName=\"Meshtastic 1da4\", macaddr=\"nBOe6x2k\", shortName=\"TN\"}"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -1278,9 +1253,9 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": "!9eeb1da4",
-          "value": "!9eeb1da4"
+          "selected": true,
+          "text": "!9eecfd24",
+          "value": "!9eecfd24"
         },
         "datasource": {
           "type": "influxdb",
@@ -1303,13 +1278,13 @@
     ]
   },
   "time": {
-    "from": "2025-09-02T13:47:34.760Z",
-    "to": "2025-09-02T13:53:58.460Z"
+    "from": "now-5m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Meshtastic",
   "uid": "fewub5osg0vlsa",
-  "version": 39,
+  "version": 2,
   "weekStart": ""
 }
