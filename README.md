@@ -18,7 +18,7 @@ MeshSentry provides comprehensive monitoring capabilities for mesh node metrics,
 ```bash
 git clone https://github.com/TN666/MeshSentry.git
 cd MeshSentry
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 ## Quick Start
