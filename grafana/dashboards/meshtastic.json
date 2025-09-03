@@ -1252,11 +1252,6 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": true,
-          "text": "!9eecfd24",
-          "value": "!9eecfd24"
-        },
         "datasource": {
           "type": "influxdb",
           "uid": "cbcb006c-f9d6-439c-ab29-4e3aec02c84b"
@@ -1268,7 +1263,36 @@
         "multi": false,
         "name": "id",
         "options": [],
-        "query": "from(bucket: \"node_info\")\n  |> range(start: -30d)\n  |> keep(columns: [\"id\"]) \n  |> group()\n  |> distinct(column: \"id\")\n  |> sort(columns: [\"id\"])",
+        "query": "from(bucket: \"node_info\")\n  |> range(start: -30d)\n  |> keep(columns: [\"_time\",\"id\"])\n  |> group(columns: [\"id\"])\n  |> max(column: \"_time\")  |> group()   |> sort(columns: [\"_time\"], desc: true)\n  |> keep(columns: [\"id\"])\n  |> distinct(column: \"id\")",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "cbcb006c-f9d6-439c-ab29-4e3aec02c84b"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": true,
+        "label": "FW Version",
+        "multi": true,
+        "name": "fw_version",
+        "options": [],
+        "query": "from(bucket: \"node_info\")\n  |> range(start: -30d)\n  |> filter(fn: (r) => r.id == \"${id}\")\n  |> keep(columns: [\"fw_version\"]) \n  |> group()\n  |> distinct(column: \"fw_version\")\n  |> sort(columns: [\"fw_version\"])",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
