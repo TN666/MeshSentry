@@ -1,11 +1,13 @@
 import meshtastic
 import meshtastic.serial_interface
+import meshtastic.ble_interface
 import time
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import os
 from dotenv import load_dotenv
 import threading
+import argparse
 
 
 def write_to_influxdb(url, token, org, bucket, data):
@@ -104,26 +106,48 @@ def get_node_data(node, fw_version):
     return data
 
 
-def monitor_port(port, url, token, org, bucket, time_interval):
+def start_monitoring(interfaces, url, token, org, bucket, time_interval, threads):
+    for interface in interfaces:
+        thread = threading.Thread(
+            target=monitor_interface,
+            args=(
+                interface,
+                url,
+                token,
+                org,
+                bucket,
+                time_interval,
+            ),
+        )
+        thread.start()
+        threads.append(thread)
+
+
+def monitor_interface(
+    interface, url, token, org, bucket, time_interval
+):
+    target = None
     try:
-        interface = meshtastic.serial_interface.SerialInterface(devPath=port)
+        target = interface["interface"](interface["arg"])
+        fw_version = getattr(target.metadata, "firmware_version", None)
+
         while True:
-            try:
-                fw_version = interface.metadata.firmware_version
-                info = interface.getMyNodeInfo()
-                print(f"Port {port} - node info: {info}")
-                node_data = get_node_data(info, fw_version)
-                print(f"Port {port} - Writing to InfluxDB:", node_data)
-                write_to_influxdb(url, token, org, bucket, node_data)
-                time.sleep(int(time_interval))
-            except Exception as e:
-                print(f"Error monitoring port {port}: {e}")
-                break
+            info = target.getMyNodeInfo()
+            node_data = get_node_data(info, fw_version)
+            print(f"[{interface['arg']}] Node Data: {node_data}")
+            write_to_influxdb(url, token, org, bucket, node_data)
+            time.sleep(int(time_interval))
+    except KeyboardInterrupt:
+        print(f"[{interface['arg']}] Interrupted.")
     except Exception as e:
-        print(f"Failed to connect to port {port}: {e}")
+        print(f"[{interface['arg']}] Error monitoring: {e}")
     finally:
-        if "interface" in locals():
-            interface.close()
+        if target:
+            try:
+                target.close()
+                print(f"[{interface['arg']}] Closed.")
+            except Exception as e:
+                print(f"[{interface['arg']}] close() warning: {e}")
 
 
 load_dotenv(".env")
@@ -132,21 +156,46 @@ token = os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN")
 org = os.getenv("DOCKER_INFLUXDB_INIT_ORG", "Meshtastic")
 bucket = os.getenv("DOCKER_INFLUXDB_INIT_BUCKET", "node_info")
 time_interval = os.getenv("TIME_INTERVAL", 30)
-
-ports = meshtastic.util.findPorts(True)
-print("list port", ports)
-
 threads = []
-for port in ports:
-    thread = threading.Thread(
-        target=monitor_port,
-        args=(port, url, token, org, bucket, time_interval)
-    ).start()
+interfaces = []
+
+parser = argparse.ArgumentParser(description="Monitor Meshtastic nodes")
+parser.add_argument(
+    "-c",
+    "--connection",
+    choices=["serial", "ble"],
+    default="serial",
+    help="Connection type to use (default: serial)",
+)
+args = parser.parse_args()
+
+if args.connection == "ble":
+    try:
+        ble_nodes = meshtastic.ble_interface.BLEInterface.scan()
+        for node in ble_nodes:
+            try:
+                ble_interface = {
+                    "interface": meshtastic.ble_interface.BLEInterface,
+                    "arg": node.address,
+                }
+                interfaces.append(ble_interface)
+            except Exception as e:
+                print(f"Error connecting to BLE node {node.address}: {e}")
+    except Exception as e:
+        print(f"BLE interface error: {e}")
+
+elif args.connection == "serial":
+    try:
+        ports = meshtastic.util.findPorts(True)
+        print("list port", ports)
+        for port in ports:
+            interfaces.append(
+                {"interface": meshtastic.serial_interface.SerialInterface, "arg": port}
+            )
+    except Exception as e:
+        print(f"Error finding serial ports: {e}")
 
 try:
-    while True:
-        time.sleep(1)
+    start_monitoring(interfaces, url, token, org, bucket, time_interval, threads)
 except KeyboardInterrupt:
     print("Shutting down...")
-    for thread in threads:
-        thread.join(timeout=1)

@@ -18,6 +18,8 @@ MeshSentry provides comprehensive monitoring capabilities for mesh node metrics,
 ```bash
 git clone https://github.com/TN666/MeshSentry.git
 cd MeshSentry
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -25,8 +27,11 @@ pip install -r requirements.txt
 Connect your Meshtastic node through the serial port on your host computer
 
 ```bash
-# Start the data collector
-python main.py
+# Start the data collector through serial port
+python main.py -c serial
+
+# or Start the data collector through BLE
+python main.py -c ble
 
 # Start the monitoring service
 docker compose up
