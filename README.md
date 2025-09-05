@@ -39,17 +39,17 @@ pip install -r requirements.txt
 ## Quick Start
 
 1. Connect your Meshtastic node to your host computer via serial port (or use BLE).
-2. Run the data collector:
+2. Start the monitoring service:
+   ```bash
+   docker compose up
+   ```
+3. Run the data collector:
    ```bash
    # Using Serial
    python main.py -c serial
   
    # Using BLE
    python main.py -c ble
-   ```
-3. Start the monitoring service:
-   ```bash
-   docker compose up
    ```
 4. Access the dashboard:
    ```bash
