@@ -9,9 +9,9 @@ MeshSentry provides real-time monitoring and analysis of mesh node metrics, enab
 
 
 ## Features
-![alt text](pictures/image.png)
-![alt text](pictures/image-1.png)
-![alt text](pictures/image-2.png)
+<img width="1512" height="701" alt="image" src="https://github.com/user-attachments/assets/40c6a94c-4515-4674-81fb-71c2f5d61be7" />
+<img width="1512" height="611" alt="image" src="https://github.com/user-attachments/assets/940943dc-74f7-4b71-8686-0571e8f5cedb" />
+<img width="1512" height="309" alt="image" src="https://github.com/user-attachments/assets/b7689eb9-04cb-4614-931b-7d604ab970b9" />
 
 - **Performance Analytics** - Detailed metrics collection and performance insights
 - **Dashboard Visualization** - Interactive web-based monitoring interface
