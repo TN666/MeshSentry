@@ -50,6 +50,10 @@ pip install -r requirements.txt
   
    # Using BLE
    python main.py -c ble
+
+   # Using TCP
+   python main.py -c tcp --tcp-hosts "192.168.0.226" "192.168.0.227"
+
    ```
 4. Access the dashboard:
    ```bash

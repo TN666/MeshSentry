@@ -1,6 +1,7 @@
 import meshtastic
 import meshtastic.serial_interface
 import meshtastic.ble_interface
+import meshtastic.tcp_interface
 import time
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
@@ -163,11 +164,20 @@ parser = argparse.ArgumentParser(description="Monitor Meshtastic nodes")
 parser.add_argument(
     "-c",
     "--connection",
-    choices=["serial", "ble"],
+    choices=["serial", "ble", "tcp"],
     default="serial",
     help="Connection type to use (default: serial)",
 )
+parser.add_argument(
+    "--tcp-hosts",
+    nargs="+",
+    type=str,
+    help="List of hostnames for TCP connection (required when using tcp)",
+)
 args = parser.parse_args()
+
+if args.connection == "tcp" and not args.tcp_hosts:
+    parser.error("--tcp-hosts is required when using TCP connection")
 
 if args.connection == "ble":
     try:
@@ -194,6 +204,14 @@ elif args.connection == "serial":
             )
     except Exception as e:
         print(f"Error finding serial ports: {e}")
+elif args.connection == "tcp":
+    try:
+        for hostname in args.tcp_hosts:
+            interfaces.append(
+                {"interface": meshtastic.tcp_interface.TCPInterface, "arg": hostname}
+            )
+    except Exception as e:
+        print(f"Error finding TCP hosts: {e}")
 
 try:
     start_monitoring(interfaces, url, token, org, bucket, time_interval, threads)
