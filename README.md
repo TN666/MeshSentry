@@ -1,10 +1,13 @@
 # MeshSentry
 
-A Meshtastic node monitoring solution.
+A **Meshtastic node monitoring solution** for comprehensive performance analytics and visualization.
+
 
 ## Overview
 
-MeshSentry provides comprehensive monitoring capabilities for mesh node metrics, analyzing traffic patterns.
+MeshSentry provides real-time monitoring and analysis of mesh node metrics, enabling users to track performance, traffic patterns, and overall network health.
+
+
 ## Features
 ![alt text](pictures/image.png)
 ![alt text](pictures/image-1.png)
@@ -16,34 +19,50 @@ MeshSentry provides comprehensive monitoring capabilities for mesh node metrics,
 ## Installation
 
 ```bash
+# Clone the repo
 git clone https://github.com/TN666/MeshSentry.git
 cd MeshSentry
+
+# Create and activate a virtual environment
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# On macOS/Linux
+source .venv/bin/activate
+
+# On Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+
+# Install dependencies
 pip install -r requirements.txt
 ```
 
 ## Quick Start
-Connect your Meshtastic node through the serial port on your host computer
 
-```bash
-# Start the data collector through serial port
-python main.py -c serial
-
-# or Start the data collector through BLE
-python main.py -c ble
-
-# Start the monitoring service
-docker compose up
-
-# Access the dashboard
-open http://localhost:3000
-
-# log in with the default credential admin / admin
-
-```
+1. Connect your Meshtastic node to your host computer via serial port (or use BLE).
+2. Run the data collector:
+   ```bash
+   # Using Serial
+   python main.py -c serial
+  
+   # Using BLE
+   python main.py -c ble
+   ```
+3. Start the monitoring service:
+   ```bash
+   docker compose up
+   ```
+4. Access the dashboard:
+   ```bash
+   http://localhost:3000
+   ```
+5. Log in with the default credentials:
+   ```bash
+   Username: admin
+   Password: admin
+   ```
 
 ## Configuration
+
 Configure MeshSentry by editing the `.env` file with your specific settings
 
 ## Contributing
